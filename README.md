@@ -1,27 +1,40 @@
-# Client-side
+# Clothes Store
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.2.6.
+Dự án trang web bán hàng được viết bằng ASP.NET Core + Angular + Entity Framewwork
 
-## Development server
+## Tính năng
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+- Quản lý sản phẩm, loại sản phẩm
+- Quản lý đơn hàng, tracking đơn hàng
+- Quản lý user, đăng ký đăng nhập
+- Phân vùng User - Admin & Seller
 
-## Code scaffolding
+## Run
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Server side
 
-## Build
+Bước 1: Set lại biến `ClothingDatabase` tại file `./Server/ClothingStore/appsettings.json` phù hợp với database của máy.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Bước 2: Chạy file database `./script.sql` tại SQL Server Management Studio (SSMS) để khởi tạo database và thêm dữ liệu.
 
-## Running unit tests
+Bước 3: Mở file sln `./Server/ClothingStore.sln` để chạy project trên Visual Studio
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Bước 4: Add migrations : 
+ - `enable-migrations`
+ - `add-migration "init"`
+ - `update-database` 
 
-## Running end-to-end tests
+Bước 5: Nhấn `Start` để chạy project server
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Client side
 
-## Further help
+Bước 1: Mở CMD tại thư mục `./Client`
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Bước 2: Tại cmd gõ `npm install` & nhấn ENTER để cài các package của project
+
+Bước 3: Sau khi cài đặt xong ở bước 2, tại cmd gõ `ng serve` để chạy project
+
+Bước 4(nếu thay đổi port ở server): chỉnh sửa file `./Client/src/environments/environment.ts` với ` urlApi ` đã thay đổi port
+
+## Account
+Tài khoản trong hệ thống:
