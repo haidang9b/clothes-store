@@ -1,0 +1,38 @@
+&nbsp;
+<div class="container">
+    <h1>List Category</h1>
+    <button mat-raised-button color="primary" (click)="AddCategory()" *ngIf="authService.currentUser.role === 'Admin'" > Add Category</button>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <input type="text" id="inputSearcher" onkeyup="handleSearch()" placeholder="Search for names category.." title="Type in a name">
+
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="tableSearcher">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let category of categories">
+                                    <td>{{category.id}}</td>
+                                    <td>{{category.name}}</td>
+                                    <td>
+                                        <button *ngIf="authService.currentUser.role === 'Admin'" mat-raised-button color="primary"
+                                            (click)="EditCategory(category)">Edit</button>
+                                        &nbsp;
+                                        <button *ngIf="authService.currentUser.role === 'Admin'"  mat-raised-button color="warn"
+                                            (click)="RemoveCategory(category)">Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

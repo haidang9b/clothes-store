@@ -1,0 +1,48 @@
+&nbsp;
+<div class="container">
+    <h1>List Order</h1>
+    <button mat-raised-button color="primary" (click)="ExportData()"><mat-icon>cloud_download</mat-icon>
+        Export</button>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <input type="text" id="inputSearcher" onkeyup="handleSearch()" placeholder="Search for names customer.." title="Type in a name">
+                        <table class="table table-hover" id="tableSearcher">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Customer</th>
+                                    <th scope="col">Account</th>
+                                    <th scope="col">Total</th>
+                                    <th scope="col">Create</th>
+                                    <th scope="col">Update</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let order of orders">
+                                    <td>{{order.id}}</td>
+                                    <td>{{order.nameReceiver}}</td>
+                                    <td>{{order.user.username}}</td>
+                                    <td>{{order.totalPrice | currency:"VND":'symbol':'3.3-3'}}</td>
+                                    <td>{{order.createdDate}}</td>
+                                    <td>{{order.updateDate}}</td>
+                                    <td>{{getStatus(order.status)}}</td>
+                                    <td>
+                                        <a mat-raised-button  routerLink="/tracking-order/{{order.id}}" >Details</a>
+                                        &nbsp;
+                                        <button mat-raised-button color="primary" (click)="EditOrder(order)">{{getStatus(order.status + 1)}}</button>
+                                        &nbsp;
+                                        <button mat-raised-button color="warn" (click)="CancelOrder(order)">Cancel</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>

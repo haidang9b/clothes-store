@@ -1,0 +1,42 @@
+&nbsp;
+<div class="container">
+    <h1>User Management</h1>
+
+    &nbsp;
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <input type="text" id="inputSearcher" onkeyup="handleSearch()" placeholder="Search for username.."
+                        title="Type in a name">
+                    <div class="table-responsive">
+                        <table class="table" id="tableSearcher">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>Full name</th>
+                                    <th>Role</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let user of users">
+                                    <td>{{user.id}}</td>
+                                    <td>{{user.username}}</td>
+                                    <td>{{user.fullName}}</td>
+                                    <td>
+                                        <mat-select [(ngModel)]="user.role_id" required
+                                            (selectionChange)="onChangeRole($event.value, user)">
+                                            <mat-option *ngFor="let role of roles" [value]="role.id">{{role.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,64 @@
+<div [formGroup]="productFormGroup" novalidate>
+    <div class="header">
+        <h2 mat-dialog-title>{{ titleRequest }} product</h2>
+        <button mat-icon-button (click)="onNoClick()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+        <div class="form-group" >
+            <label for="title">Title </label>
+            <input type="text" class="form-control" required formControlName="title" [(ngModel)]="data.title">
+        </div>
+        
+        <div class="form-group" >
+            <label for="price">Price </label>
+            <input type="number" class="form-control" required formControlName="price" [(ngModel)]="data.price" min="1">
+        </div>
+    
+        <div class="form-group" >
+            <label for="quantity">Quantity </label>
+            <input type="number" class="form-control" required formControlName="quantity" [(ngModel)]="data.quantity" min="1">
+        </div>
+    
+        <div class="form-group" >
+            <label for="description">Description </label>
+            <textarea  rows="5" class="form-control" required formControlName="description" [(ngModel)]="data.description">
+                </textarea>
+        </div>
+    
+        <div class="form-group">
+            <label for="category">Category:</label>
+            <select class="form-control" formControlName="category">
+                <option *ngFor="let item of categories" [value]="item.id">{{ item.name }}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="uploadImage">Image:</label>
+            <input type="file" multiple="false" accept="image/*"  class="form-control" id="uploadImage" (change)="fileChangeEvent($any($event).target.files)">
+        </div>
+        <div class="form-group">
+            <button mat-raised-button color="basic" (click)="uploadFile()">
+                Upload
+            </button>
+        </div>
+        <div class="form-group" [hidden]="true" >
+            <input formControlName="image"  />
+        </div>
+        <div class="form-group">
+            <label for="imageReview">Image Preview:</label>
+            <img [src]="imageUrl" id="imageReview" width="200" />
+        </div>
+    
+        <div class="form-group" *ngIf="(productFormGroup.status == 'INVALID' && productFormGroup.dirty) || message.length > 0">
+            <div class="alert alert-danger">
+                Information is invalid, please try again.
+            </div>
+        </div>
+    </div>
+    
+    <div mat-dialog-actions [align]="'end'">
+        <button mat-raised-button color="primary" (click)="onOkClick()" [disabled]="productFormGroup.status == 'INVALID' && message.length == 0 && isUploadFile == false"> {{ titleRequest }} </button>
+        <button mat-raised-button (click)="onNoClick()">Cancel</button>
+    </div>
+</div>

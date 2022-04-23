@@ -1,0 +1,38 @@
+<div class="container">
+    <div>
+        <h1 class="header-title">{{titleThisPage | uppercase}}</h1>
+    </div>
+    <section class="">
+        <div class="px-4 px-lg-5 mt-5">
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                <div *ngFor="let item of products">
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" src="{{item.image}}" alt="{{item.description}}" />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder title-product">{{item.title}}</h5>
+                                    <!-- Product price-->
+                                    {{item.price | currency:"VND":'symbol':'3.3-3'}}
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent " style="display: flex;">
+                                <div class="text-center" style="flex:float;"><a class="btn btn-outline-dark mt-auto"
+                                        routerLink="/product-detail/{{item.id}}">View detail</a></div>
+                                &nbsp;
+                                <div class="text-center" style="flex:float;"><button
+                                        class="btn btn-outline-dark mt-auto" (click)="addToCart(item)">Add to
+                                        cart</button></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>

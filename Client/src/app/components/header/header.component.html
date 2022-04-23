@@ -1,0 +1,46 @@
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand" routerLink="/order-management">Admin</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+              <li class="nav-item">
+                <a class="nav-link" [routerLinkActive]="['active']"  routerLink="/home">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" [routerLinkActive]="['active']" routerLink="/order-management">Order management</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" [routerLinkActive]="['active']" routerLink="/category-management">Category</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" [routerLinkActive]="['active']" routerLink="/product-management">Product</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" [routerLinkActive]="['active']" routerLink="/store">Store</a>
+              </li>
+              <li class="nav-item" *ngIf="authService.currentUser.role === 'Admin'">
+                <a class="nav-link" [routerLinkActive]="['active']" routerLink="/user-management">Users</a>
+              </li>
+            </ul>
+            <div class="d-flex">
+              <div *ngIf="authService.isLoggedIn$ | async; then thenLoggedIn else elseNotLoggedIn"></div>
+              <ng-template #thenLoggedIn>
+                <span class="navbar-text">
+                  Hello <strong>{{user.fullname}}</strong>
+                </span>
+                &nbsp;
+                <a class="btn btn-outline-secondary" role="button" (click)="Logout()">Logout</a>
+                &nbsp;
+                <a class="btn btn-outline-secondary" role="button" routerLink="change-password" style="justify-content:center; margin:0; padding:0;"><mat-icon style="justify-self: center; margin:0; padding:0;">settings</mat-icon></a>
+                &nbsp;
+              </ng-template>
+              <ng-template #elseNotLoggedIn>
+                <li class="navbar-text  ml-auto">
+                  <a class="btn btn-outline-secondary" role="button" routerLink="/login">Login</a>
+                </li>        
+              </ng-template>
+            </div>
+        </div>
+    </div>
+</nav>

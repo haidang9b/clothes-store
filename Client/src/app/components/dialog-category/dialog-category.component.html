@@ -1,0 +1,20 @@
+<div [formGroup]="categoryFormGroup" novalidate>
+    <div class="header">
+        <h2 mat-dialog-title>{{ nameRequest }} Category</h2>
+        <button mat-icon-button (click)="onNoClick()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    
+    <div class="form-group" >
+        <label for="name">Category Name</label>
+        <input type="text" class="form-control" id="name" required formControlName="name" [(ngModel)]="data.name">
+        <div class="alert alert-danger" *ngIf="categoryFormGroup.status == 'INVALID' && categoryFormGroup.dirty">
+            Category name is required
+    </div>
+    
+    <div mat-dialog-actions [align]="'end'">
+        <button mat-raised-button color="primary" [mat-dialog-close]="data" [disabled]="categoryFormGroup.status == 'INVALID'"> {{ nameRequest }} </button>
+        <button mat-raised-button (click)="onNoClick()">Cancel</button>
+    </div>
+</div>

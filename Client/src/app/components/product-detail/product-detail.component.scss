@@ -1,0 +1,35 @@
+.area-image{
+    img {
+        max-width: 100%;
+        padding: 1em 1em 1em 1em;
+        border-radius: 6%;
+    }
+}
+.area-text{
+    .detail-price{
+        font-size: 24px;
+        font-weight: bold;
+        color: #ff0000;
+    }
+    .detail-quantity{
+        span{
+            margin-right: 36px;
+        }
+        margin-top: 20px;
+        font-size: 18px;
+        color: black;
+    }
+    .detail-description{
+        margin-top: 4px;
+        font-size: 18px;
+        color: black;
+    }
+}
+.zero-quantity{
+    text-decoration: line-through
+}
+
+.mg {
+    margin-top: 20px;
+    margin-bottom:20px;
+}

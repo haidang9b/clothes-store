@@ -1,0 +1,14 @@
+<div class="content">
+  <div
+    *ngIf="authService.isLoggedIn$ && authService.currentUser!==null && (authService.currentUser.role == 'Admin' || authService.currentUser.role == 'Seller'); then headerStaff else headerClient">
+  </div>
+  <ng-template #headerStaff>
+    <app-header></app-header>
+  </ng-template>
+  <ng-template #headerClient>
+    <app-header-client></app-header-client>
+  </ng-template>
+  <router-outlet></router-outlet>
+  <app-footer></app-footer>
+</div>
+<app-custom-toast></app-custom-toast>

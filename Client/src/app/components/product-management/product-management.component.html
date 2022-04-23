@@ -1,0 +1,50 @@
+&nbsp;
+<div class="container">
+    <h1>List Product</h1>
+    <button mat-raised-button color="primary" (click)="AddProduct()" *ngIf="authService.currentUser.role === 'Admin'">
+        Add product</button>
+    &nbsp;
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <input type="text" id="inputSearcher" onkeyup="handleSearch()"
+                        placeholder="Search for names product.." title="Type in a name">
+                    <div class="table-responsive">
+                        <table class="table" id="tableSearcher">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Category</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let product of products">
+                                    <td [ngClass]="{'zero-quantity': product.quantity === 0}">{{ product.id }}</td>
+                                    <td [ngClass]="{'zero-quantity': product.quantity === 0}">{{ product.title }}</td>
+                                    <td [ngClass]="{'zero-quantity': product.quantity === 0}">{{ product.price }}</td>
+                                    <td [ngClass]="{'zero-quantity': product.quantity === 0}">{{ product.quantity }}
+                                    </td>
+                                    <td [ngClass]="{'zero-quantity': product.quantity === 0}">{{ product.category.name
+                                        }}</td>
+                                    <td>
+                                        <button mat-raised-button color="primary" (click)="EditProduct(product)"
+                                            *ngIf="authService.currentUser.role === 'Admin'">Edit</button>
+                                        <button mat-raised-button color="warn" (click)="DeleteProduct(product)"
+                                            *ngIf="authService.currentUser.role === 'Admin'">Delete</button>
+                                        <a mat-raised-button target="_blank"
+                                            routerLink="/product-detail/{{product.id}}">Detail</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

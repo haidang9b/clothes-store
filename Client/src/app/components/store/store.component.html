@@ -1,0 +1,21 @@
+&nbsp;
+<div class="container">
+  <div *ngFor="let city of cities">
+    <mat-card class="example-card">
+      <mat-card-subtitle>{{city.name}}</mat-card-subtitle>
+      <div *ngFor="let store of stores">
+        <div *ngIf="city.id == store.city">
+          <mat-card-title>{{store.name}}</mat-card-title>
+          <mat-card-content>
+            <p><strong>Address: </strong> {{store.address}}</p>
+            <p><strong>Phone: </strong> 0987654321</p>
+          </mat-card-content>
+          &nbsp;
+        </div>
+      </div>
+    </mat-card>
+    &nbsp;
+    &nbsp;
+  </div>
+</div>
+&nbsp;

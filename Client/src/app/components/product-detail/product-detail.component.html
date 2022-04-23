@@ -1,0 +1,44 @@
+<div class="container mg">
+    <div *ngIf="product; then template1 else template2"></div>
+    <ng-template #template1>
+        <div class="row">
+            <div class="col-md-6 col-xs-12 area-image">
+                <img src="{{product.image}}" alt="{{product.title}}" class=" col-md-12">
+            </div>
+            <div class="col-md-6 col-xs-12 area-text">
+                <h1>{{ product.title | uppercase }}</h1>
+                <small>ID: {{product.id}}</small>
+                <div class="detail-price" [ngClass]="{'zero-quantity': product.quantity === 0}">{{ product.price |
+                    currency:"VND":'symbol':'3.3-3' }}</div>
+                <div class="detail-quantity">
+                    <span><strong>Quantity:</strong></span>
+                    <div *ngIf="product.quantity > 0; then span1 else span2"></div>
+                    <ng-template #span1>
+                        <span>{{product.quantity}} product</span>
+                    </ng-template>
+                    <ng-template #span2>
+                        <span class="text-danger">Out of stock</span>
+                    </ng-template>
+                </div>
+                &nbsp;
+                <div>
+                    <button (click)="addToCart()" mat-raised-button color="primary" [disabled]="product.quantity == 0">
+                        <mat-icon>add_shopping_cart</mat-icon>Add to cart
+                    </button>
+                </div>
+                <hr>
+
+                <div class="detail-description">
+                    <p><strong>Description</strong></p>
+                    <div [innerText]="product.description">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #template2>
+        <app-error></app-error>
+    </ng-template>
+</div>

@@ -1,0 +1,18 @@
+[
+
+    {
+        "id": 0,
+        "name": "NULL",
+        "type" : "NULL"
+    },
+    {
+        "id": 1,
+        "name": "Edit",
+        "type": "edit"
+    },
+    {
+        "id": 2,
+        "name": "Add",
+        "type": "add"
+    }
+]

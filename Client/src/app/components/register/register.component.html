@@ -1,0 +1,33 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 my-5 mx-auto border rounded px-3 py-3" id="form-login">
+            <h2 class="text-center">Register</h2>
+            <div [formGroup]="registerFormGroup" novalidate>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input name="username" type="text" class="form-control" formControlName="username" id="username"
+                        placeholder="Enter your username" required>
+                </div>
+                <div class="form-group">
+                    <label for="fullName">Full name</label>
+                    <input name="fullName" type="text" class="form-control" formControlName="fullName" id="fullName"
+                        placeholder="Enter full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input name="password" type="password" class="form-control" formControlName="password" id="password"
+                        placeholder="Enter your password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Password</label>
+                    <input name="confirmPassword" type="password" class="form-control" formControlName="confirmPassword"
+                        id="confirmPassword" placeholder="Enter your confimed password" required>
+                </div>
+                <div class="form-group btn-login-form">
+                    <button mat-raised-button class="px-5" color="primary" (click)="onRegister()">Register</button>
+                    <button mat-raised-button class="px-5" color="basic" routerLink="/login">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
