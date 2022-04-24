@@ -109,7 +109,6 @@ export class AuthService {
       user.username = obj['unique_name'];
       return user;
     } catch (e) {
-      console.log(e);
       return new User();
     }
   }
