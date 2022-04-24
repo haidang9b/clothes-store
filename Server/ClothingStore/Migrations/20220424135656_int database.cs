@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ClothingStore.Migrations
 {
-    public partial class init : Migration
+    public partial class intdatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -115,6 +116,11 @@ namespace ClothingStore.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     user_id = table.Column<int>(type: "int", nullable: false),
+                    createdDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    updateDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    nameReceiver = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    numberPhone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -122,6 +128,28 @@ namespace ClothingStore.Migrations
                     table.PrimaryKey("PK_Bill", x => x.id);
                     table.ForeignKey(
                         name: "FK_Bill_User_user_id",
+                        column: x => x.user_id,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RefreshToken",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    refreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedByIp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    user_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshToken", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_RefreshToken_User_user_id",
                         column: x => x.user_id,
                         principalTable: "User",
                         principalColumn: "Id",
@@ -176,6 +204,11 @@ namespace ClothingStore.Migrations
                 column: "category_id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RefreshToken_user_id",
+                table: "RefreshToken",
+                column: "user_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_User_role_id",
                 table: "User",
                 column: "role_id");
@@ -188,6 +221,9 @@ namespace ClothingStore.Migrations
 
             migrationBuilder.DropTable(
                 name: "Customer");
+
+            migrationBuilder.DropTable(
+                name: "RefreshToken");
 
             migrationBuilder.DropTable(
                 name: "Store");

@@ -5,11 +5,8 @@ using System.Threading.Tasks;
 
 namespace ClothingStore.Entities.Dtos
 {
-    public class UserDto
+    public class RefreshTokenDto
     {
-        public string Username { get; set; }
-        public string Fullname { get; set; }
-        public string Token { get; set; }
         public string RefreshToken { get; set; }
     }
 }

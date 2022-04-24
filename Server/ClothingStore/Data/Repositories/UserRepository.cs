@@ -82,6 +82,27 @@ namespace ClothingStore.Data.Repositories
             old.role_id = value.role_id;
             return await _dbContext.SaveChangesAsync() > 0;
         }
+
+        public async Task<bool> AddRefreshToken(RefreshToken refreshToken)
+        {
+            await _dbContext.refreshTokens.AddAsync(refreshToken);
+            return await _dbContext.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> RemoveRefreshToken(RefreshToken model)
+        {
+            var old = await _dbContext.refreshTokens.FirstOrDefaultAsync(r => r.refreshToken == model.refreshToken && r.CreatedByIp == model.CreatedByIp && r.CreatedDate.AddDays(5) >= DateTime.Now);
+            _dbContext.refreshTokens.Remove(old);
+            return await _dbContext.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> ValidateRefreshToken(string token, string ip)
+        {
+            var tokens = await _dbContext.refreshTokens.Where(r => r.refreshToken.Contains(token) && r.CreatedByIp.Contains(ip) && r.CreatedDate.AddDays(5) >= DateTime.Now).ToListAsync();
+            if (tokens.Count > 0)
+                return true;
+            return false;
+        }
     }
 
 }

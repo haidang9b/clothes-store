@@ -47,12 +47,16 @@ namespace ClothingStore.Controllers
                     {
                         result.IsSuccess = true;
                         result.Message = "Login is successfully";
+                        var refresh = _tokenService.CreateTokenRefresh(userExist);
+                        await _repository.AddRefreshToken(new RefreshToken { refreshToken = refresh, CreatedByIp = GetIPAddress(), user_id = userExist.Id, CreatedDate = DateTime.Now });
                         result.Data = new UserDto()
                         {
                             Username = userExist.Username,
                             Fullname = userExist.FullName,
-                            Token = _tokenService.CreateToken(userExist)
+                            Token = _tokenService.CreateToken(userExist),
+                            RefreshToken = refresh
                         };
+                         
                     }
                     else
                     {
@@ -69,18 +73,52 @@ namespace ClothingStore.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpGet("testadmin")]
-        public IActionResult Test()
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> PostRefreshToken([FromForm] RefreshTokenDto value) 
         {
-            return Ok("Ok admin");
+            var result = new ApiResult();
+            try
+            {
+                if (await _repository.ValidateRefreshToken(value.RefreshToken, GetIPAddress()))
+                {
+                    var validate = _tokenService.GetPayloadRefreshToken(value.RefreshToken);
+                    var exist = await _repository.GetUserByUsername(validate.Issuer);
+                    result.Data = _tokenService.CreateToken(exist);
+                    result.IsSuccess = true;
+                }
+                else
+                {
+                    result.IsSuccess = false;
+                }
+            }
+            catch(Exception e)
+            {
+                result.InternalError();
+            }
+            return Ok(result);
         }
 
-        [Authorize(Roles = "Customer")]
-        [HttpGet("testuser")]
-        public IActionResult TestU()
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout([FromForm] RefreshTokenDto value)
         {
-            return Ok("Ok customer");
+            var result = new ApiResult();
+            try
+            {
+                var rftk = new RefreshToken { CreatedByIp = GetIPAddress(), refreshToken = value.RefreshToken };
+                if(await _repository.RemoveRefreshToken(rftk))
+                {
+                    result.IsSuccess = true;
+                }
+                else
+                {
+                    result.IsSuccess = false;
+                }
+            }
+            catch(Exception e)
+            {
+                result.InternalError();
+            }
+            return Ok(result);
         }
 
         [Authorize(Roles = "Seller,Admin")]
@@ -217,6 +255,14 @@ namespace ClothingStore.Controllers
                 result.InternalError();
             }
             return Ok(result);
+        }
+
+        private string GetIPAddress()
+        {
+            if (Request.Headers.ContainsKey("X-Forwarded-For"))
+                return Request.Headers["X-Forwarded-For"];
+            else
+                return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
         }
     }
 }

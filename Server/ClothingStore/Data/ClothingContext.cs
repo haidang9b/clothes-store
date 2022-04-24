@@ -22,5 +22,6 @@ namespace ClothingStore.Entities
         public DbSet<Customer> customers { get; set; }
         public DbSet<Bill> bills { get; set; }
         public DbSet<BillDetail> billDetails { get; set; }
+        public DbSet<RefreshToken> refreshTokens { get; set; }
     }
 }

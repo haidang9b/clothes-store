@@ -88,7 +88,6 @@ export class ProductManagementComponent implements OnInit {
           image: result.image,
           category: result.category['value'] | result.category
         }
-        console.log(obj);
         this.productManagementService.updateProduct(obj).subscribe(result => {
           if(result.isSuccess){
             this.messageService.add({
@@ -125,7 +124,6 @@ export class ProductManagementComponent implements OnInit {
       },
       (error) => {
         this.products = [];
-        console.log(error);
       }
     );
   }
@@ -156,9 +154,7 @@ export class ProductManagementComponent implements OnInit {
           image: result.image,
           category: result.category['value'] | result.category
         }
-        console.log(obj);
         this.productManagementService.addProduct(obj).subscribe(result => {
-          console.log(result);
           if(result.isSuccess){
             this.messageService.add({
               key: 'tr',

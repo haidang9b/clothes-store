@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { User } from 'src/models/user';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
@@ -16,7 +16,7 @@ export class AuthService {
   urlApi = `${environment.urlApi}user`;
 
   get token(): any {
-    return this.cookieService.get('crsfToken');
+    return this.cookieService.get('accessToken');
   }
 
   constructor(
@@ -35,7 +35,8 @@ export class AuthService {
         if (res.isSuccess) {
           // console.log(res.data)
           this.currentUser = await this.getUser(res.data.token);
-          this.cookieService.set('crsfToken', res.data.token);
+          this.cookieService.set('accessToken', res.data.token);
+          this.cookieService.set('refreshToken', res.data.refreshToken);
           this._isLoggedIn$.next(true);
         }
       })
@@ -43,11 +44,17 @@ export class AuthService {
   }
 
   logout() {
+    var formData = new FormData();
+    formData.append('RefreshToken', this.cookieService.get('refreshToken'));
     this._isLoggedIn$.next(false);
     this.isLoggedIn$ = this._isLoggedIn$.asObservable();
     this.currentUser = null;
-    this.cookieService.delete('crsfToken');
+    this.cookieService.delete('accessToken');
+    this.cookieService.delete('refreshToken');
     this.router.navigate(['/login']);
+    this.http.post(`${this.urlApi}/logout`, formData).subscribe(res => {
+      return;
+    })
   }
 
   register(obj: any): Observable<any> {
@@ -88,6 +95,20 @@ export class AuthService {
   loggedIn() {
     return !!this.token;
   }
+
+  refreshToken() {
+    var formData = new FormData();
+    formData.append('RefreshToken', this.cookieService.get('refreshToken'));
+    return this.http.post(`${this.urlApi}/refresh-token`, formData).pipe(tap((res: any) => {
+      if (res.isSuccess) {
+        this.cookieService.set('accessToken', res.data);
+      }
+      else{
+        this.logout();
+      }
+    }));
+  }
+
 
   private getUser(token: any) {
     try {

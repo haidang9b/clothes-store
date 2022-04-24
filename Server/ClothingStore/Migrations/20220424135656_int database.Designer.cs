@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClothingStore.Migrations
 {
     [DbContext(typeof(ClothingContext))]
-    [Migration("20220418042406_edit bill table")]
-    partial class editbilltable
+    [Migration("20220424135656_int database")]
+    partial class intdatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -115,6 +115,32 @@ namespace ClothingStore.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Customer");
+                });
+
+            modelBuilder.Entity("ClothingStore.Entities.Models.RefreshToken", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedByIp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("refreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("user_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("user_id");
+
+                    b.ToTable("RefreshToken");
                 });
 
             modelBuilder.Entity("ClothingStore.Entities.Models.Role", b =>
@@ -241,6 +267,17 @@ namespace ClothingStore.Migrations
                     b.Navigation("product");
                 });
 
+            modelBuilder.Entity("ClothingStore.Entities.Models.RefreshToken", b =>
+                {
+                    b.HasOne("ClothingStore.Entities.Models.User", "user")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("user_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("user");
+                });
+
             modelBuilder.Entity("ClothingStore.Entities.Models.User", b =>
                 {
                     b.HasOne("ClothingStore.Entities.Models.Role", "role")
@@ -276,6 +313,11 @@ namespace ClothingStore.Migrations
             modelBuilder.Entity("ClothingStore.Entities.Models.Role", b =>
                 {
                     b.Navigation("users");
+                });
+
+            modelBuilder.Entity("ClothingStore.Entities.Models.User", b =>
+                {
+                    b.Navigation("RefreshTokens");
                 });
 
             modelBuilder.Entity("ClothingStore.Entities.Product", b =>

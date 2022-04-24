@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ClothingStore.Entities.Models
@@ -18,6 +19,11 @@ namespace ClothingStore.Entities.Models
         public string FullName { get; set; }
         public int role_id { get; set; }
         [ForeignKey("role_id")]
+        [JsonIgnore]
         public Role role { get; set; }
+        [JsonIgnore]
+
+        public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
+
     }
 }

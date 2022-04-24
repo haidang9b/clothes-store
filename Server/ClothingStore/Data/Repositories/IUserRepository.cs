@@ -17,5 +17,9 @@ namespace ClothingStore.Data.Repositories
         public Task<IEnumerable<UserProfileDto>> GetUsers();
         public Task<IEnumerable<Role>> GetRoles();
         public Task<bool> ChangeRole(ChangeRoleDto value);
+
+        public Task<bool> AddRefreshToken(RefreshToken refreshToken);
+        public Task<bool> RemoveRefreshToken(RefreshToken refreshToken);
+        public Task<bool> ValidateRefreshToken(string token, string ip);
     }
 }
