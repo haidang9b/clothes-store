@@ -140,7 +140,7 @@ namespace ClothingStore.Controllers
         }
 
         [HttpPost("export-order")]
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles ="Admin,Seller")]
         public async Task<IActionResult> ExportOrder([FromForm]ExportDataDto data)
         {
             var result = new ApiResult();
