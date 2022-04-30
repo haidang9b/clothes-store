@@ -37,6 +37,7 @@ namespace ClothingStore.Data.Repositories
             old.image = product.image;
             old.price = product.price;
             old.title = product.title;
+            old.category_id = product.category_id;
             old.description = product.description;
             var rows = await _dbContext.SaveChangesAsync();
             return rows > 0;
