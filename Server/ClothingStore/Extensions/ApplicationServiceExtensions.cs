@@ -3,10 +3,6 @@ using ClothingStore.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ClothingStore.Extensions
 {
@@ -19,6 +15,16 @@ namespace ClothingStore.Extensions
             {
                 options.UseSqlServer(config.GetConnectionString("ClothingDatabase"));
             });
+            return services;
+        }
+        public static IServiceCollection RegisterServices(this IServiceCollection services)
+        {
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IStoreRepository, StoreRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IBillRepository, BillRepository>();
             return services;
         }
     }

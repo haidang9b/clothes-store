@@ -3,8 +3,6 @@ using ClothingStore.Entities;
 using ClothingStore.Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -15,22 +13,22 @@ namespace ClothingStore.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        private readonly ICustomerRepository _repository;
-        public CustomersController(ICustomerRepository repository)
+        private readonly ICustomerRepository _customerRepository;
+        public CustomersController(ICustomerRepository customerRepository)
         {
-            _repository = repository;
+            _customerRepository = customerRepository;
         }
         // GET: api/<CustomersController>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            ApiResult result = new ApiResult();
+            ApiResult result = new();
             try
             {
-                result.Data = await _repository.GetCustomers();
+                result.Data = await _customerRepository.GetCustomers();
                 result.Message = "Get all customer is successfully";
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 result.InternalError();
             }
@@ -44,7 +42,7 @@ namespace ClothingStore.Controllers
             ApiResult result = new ApiResult();
             try
             {
-                result.Data = await _repository.GetCustomerByID(id);
+                result.Data = await _customerRepository.GetCustomerByID(id);
                 result.Message = "Get customer by ID is successfully";
             }
             catch (Exception e)
@@ -60,7 +58,7 @@ namespace ClothingStore.Controllers
             ApiResult result = new ApiResult();
             try
             {
-                result.Data = await _repository.GetCustomerByNumberPhone(phone);
+                result.Data = await _customerRepository.GetCustomerByNumberPhone(phone);
                 result.Message = "Get customer by phone is successfully";
             }
             catch (Exception e)
@@ -77,7 +75,7 @@ namespace ClothingStore.Controllers
             ApiResult result = new ApiResult();
             try
             {
-                if (await _repository.InsertCustomer(value))
+                if (await _customerRepository.InsertCustomer(value))
                 {
                     result.Message = "Add new customer is successfully";
                 }
@@ -101,8 +99,8 @@ namespace ClothingStore.Controllers
             ApiResult result = new ApiResult();
             try
             {
-                customer.id = id;
-                if (await _repository.EditCustomer(customer))
+                customer.Id = id;
+                if (await _customerRepository.EditCustomer(customer))
                 {
                     result.Message = "Update customer is successfully";
                 }
@@ -126,8 +124,8 @@ namespace ClothingStore.Controllers
             ApiResult result = new ApiResult();
             try
             {
-                var old = new Customer { id = id };
-                if (await _repository.DeleteCustomer(old))
+                var old = new Customer { Id = id };
+                if (await _customerRepository.DeleteCustomer(old))
                 {
                     result.Message = "Remove a customer is successfully";
                 }

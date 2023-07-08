@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace ClothingStore.Entities.Models
 {
@@ -13,15 +9,15 @@ namespace ClothingStore.Entities.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int id { get; set; }
-        public int bill_id { get; set; }
-        public int product_id { get; set; }
-        public int quantity { get; set; }
-        [ForeignKey("bill_id")]
+        public int Id { get; set; }
+        public int BillId { get; set; }
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
+        [ForeignKey(nameof(BillId))]
         [JsonIgnore]
-        public virtual Bill bill { get; set; }
-        [ForeignKey("product_id")]
+        public virtual Bill Bill { get; set; }
+        [ForeignKey(nameof(ProductId))]
         [JsonIgnore]
-        public virtual Product product { get; set; }
+        public virtual Product Product { get; set; }
     }
 }

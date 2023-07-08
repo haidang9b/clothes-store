@@ -1,20 +1,14 @@
+using ClothingStore.Data.Repositories;
+using ClothingStore.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ClothingStore.Entities;
-using ClothingStore.Data.Repositories;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Text;
-using ClothingStore.Extensions;
 
 namespace ClothingStore
 {
@@ -33,7 +27,8 @@ namespace ClothingStore
             services.AddRazorPages();
             services.AddApplicationService(Configuration);
             // register service and repository
-            RegisterService(services);
+
+            services.RegisterServices();
 
             services.AddCors();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -62,7 +57,7 @@ namespace ClothingStore
                     Version = "v1",
                     Title = "Clothing Store API",
                     Description = "Backend API for Clothing Store project",
-                    
+
                 });
             });
         }
@@ -71,7 +66,8 @@ namespace ClothingStore
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseSwagger();
-            app.UseSwaggerUI(c => {
+            app.UseSwaggerUI(c =>
+            {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Clothing Api v1");
             });
             if (env.IsDevelopment())
@@ -104,17 +100,8 @@ namespace ClothingStore
                 endpoints.MapControllers();
                 endpoints.MapRazorPages();
             });
-            
+
         }
 
-        private void RegisterService(IServiceCollection services)
-        {
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<IStoreRepository, StoreRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<ICustomerRepository, CustomerRepository>();
-            services.AddScoped<IBillRepository, BillRepository>();
-        }
     }
 }

@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ClothingStore.Entities.Dtos
+﻿namespace ClothingStore.Entities.Dtos
 {
     public class CartDto
     {
-        public int[] products { get; set; }
-        public string nameReceiver { get; set; }
-        public string numberPhone { get; set; }
-        public string address { get; set; }
+        public int[] Products { get; set; }
+        public string NameReceiver { get; set; }
+        public string NumberPhone { get; set; }
+        public string Address { get; set; }
     }
 }

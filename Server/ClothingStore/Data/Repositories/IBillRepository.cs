@@ -1,9 +1,7 @@
 ﻿using ClothingStore.Entities.Dtos;
 using ClothingStore.Entities.Models;
 using ClothingStore.Enums;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ClothingStore.Data.Repositories

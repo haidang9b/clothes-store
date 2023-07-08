@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ClothingStore.Entities
+﻿namespace ClothingStore.Entities
 {
     public class ApiResult
     {
@@ -13,7 +6,7 @@ namespace ClothingStore.Entities
         public bool IsSuccess { get; set; }
         public string Message { get; set; }
         public object Data { get; set; }
-        public ApiResult(object data = null, bool isSuccess = true, string message="", int httpStatusCode = 200)
+        public ApiResult(object data = null, bool isSuccess = true, string message = "", int httpStatusCode = 200)
         {
             Data = data;
             HttpStatusCode = httpStatusCode;

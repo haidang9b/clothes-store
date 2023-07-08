@@ -3,10 +3,7 @@ using ClothingStore.Entities;
 using ClothingStore.Entities.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -17,10 +14,10 @@ namespace ClothingStore.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly ICategoryRepository _repository;
-        public CategoriesController(ICategoryRepository repository)
+        private readonly ICategoryRepository _categoryRepository;
+        public CategoriesController(ICategoryRepository categoryRepository)
         {
-            _repository = repository;
+            _categoryRepository = categoryRepository;
         }
         // GET: api/<CategoriesController>
         [HttpGet]
@@ -29,9 +26,9 @@ namespace ClothingStore.Controllers
             ApiResult result = new ApiResult();
             try
             {
-                result.Data = await _repository.GetCategories();
+                result.Data = await _categoryRepository.GetCategories();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 result.InternalError();
             }
@@ -45,7 +42,7 @@ namespace ClothingStore.Controllers
             ApiResult result = new ApiResult();
             try
             {
-                var category = await _repository.GetCategoryByID(id);
+                var category = await _categoryRepository.GetCategoryByID(id);
                 if (category == null)
                 {
                     result.Message = "Get category by ID is failed";
@@ -58,7 +55,7 @@ namespace ClothingStore.Controllers
                     result.Message = "Get category by ID is Successfully";
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 result.InternalError();
             }
@@ -73,7 +70,7 @@ namespace ClothingStore.Controllers
             ApiResult result = new ApiResult();
             try
             {
-                if(await _repository.InsertCategory(category))
+                if (await _categoryRepository.InsertCategory(category))
                 {
                     result.Message = "Add new category is successfully";
                 }
@@ -83,7 +80,7 @@ namespace ClothingStore.Controllers
                     result.Message = "Add new category is failed";
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 result.InternalError();
             }
@@ -99,8 +96,8 @@ namespace ClothingStore.Controllers
             ApiResult result = new ApiResult();
             try
             {
-                category.id = id;
-                if(await _repository.EditCategory(category))
+                category.Id = id;
+                if (await _categoryRepository.EditCategory(category))
                 {
                     result.Message = "Update category is successfully";
                 }
@@ -110,7 +107,7 @@ namespace ClothingStore.Controllers
                     result.Message = "Update category is failed";
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 result.InternalError();
             }
@@ -125,8 +122,8 @@ namespace ClothingStore.Controllers
             ApiResult result = new ApiResult();
             try
             {
-                var category = new Category { id = id };
-                if (await _repository.DeleteCategory(category))
+                var category = new Category { Id = id };
+                if (await _categoryRepository.DeleteCategory(category))
                 {
                     result.Message = "Remove a category is successfully";
                 }
@@ -136,7 +133,7 @@ namespace ClothingStore.Controllers
                     result.Message = "Remove a category is failed";
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 result.InternalError();
             }

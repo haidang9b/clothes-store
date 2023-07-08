@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ClothingStore.Entities.Models
 {
@@ -16,8 +12,8 @@ namespace ClothingStore.Entities.Models
         public string Username { get; set; }
         public string Password { get; set; }
         public string FullName { get; set; }
-        public int role_id { get; set; }
-        [ForeignKey("role_id")]
-        public Role role { get; set; }
+        public int RoleId { get; set; }
+        [ForeignKey(nameof(RoleId))]
+        public Role Role { get; set; }
     }
 }

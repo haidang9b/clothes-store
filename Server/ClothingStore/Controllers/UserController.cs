@@ -1,13 +1,9 @@
 ﻿using ClothingStore.Data.Repositories;
 using ClothingStore.Entities;
 using ClothingStore.Entities.Dtos;
-using ClothingStore.Entities.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ClothingStore.Controllers
@@ -16,18 +12,14 @@ namespace ClothingStore.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepository _repository;
+        private readonly IUserRepository _userRepository;
         private readonly ITokenService _tokenService;
-        public UserController(IUserRepository repository, ITokenService tokenService)
+        public UserController(IUserRepository userRepository, ITokenService tokenService)
         {
-            _repository = repository;
+            _userRepository = userRepository;
             _tokenService = tokenService;
         }
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            return Ok("OK");
-        }
+        
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto user)
@@ -35,7 +27,7 @@ namespace ClothingStore.Controllers
             var result = new ApiResult();
             try
             {
-                var userExist = await _repository.GetUserByUsername(user.Username);
+                var userExist = await _userRepository.GetUserByUsername(user.Username);
                 if (userExist == null)
                 {
                     result.IsSuccess = false;
@@ -69,27 +61,6 @@ namespace ClothingStore.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = "Admin")]
-        [HttpGet("testadmin")]
-        public IActionResult Test()
-        {
-            return Ok("Ok admin");
-        }
-
-        [Authorize(Roles = "Customer")]
-        [HttpGet("testuser")]
-        public IActionResult TestU()
-        {
-            return Ok("Ok customer");
-        }
-
-        [Authorize(Roles = "Seller,Admin")]
-        [HttpGet("testuseradmin")]
-        public IActionResult TestAll()
-        {
-            return Ok("OK Seller Admin");
-        }
-
 
         [AllowAnonymous]
         [HttpPost("register")]
@@ -98,13 +69,13 @@ namespace ClothingStore.Controllers
             var result = new ApiResult();
             try
             {
-                if (await _repository.GetUserByUsername(user.Username) != null)
+                if (await _userRepository.GetUserByUsername(user.Username) != null)
                 {
                     result.IsSuccess = false;
                     result.Message = "Username has exist in database";
                     result.HttpStatusCode = 400;
                 }
-                else if (await _repository.register(user))
+                else if (await _userRepository.register(user))
                 {
                     result.IsSuccess = true;
                     result.Message = "Register account is successfully";
@@ -133,16 +104,16 @@ namespace ClothingStore.Controllers
 
             try
             {
-                value.username = User.Identity.Name;
-                var user = await _repository.GetUserByUsername(value.username);
-                if(BCrypt.Net.BCrypt.Verify(value.passwordOld, user.Password) == false)
+                value.Username = User.Identity.Name;
+                var user = await _userRepository.GetUserByUsername(value.Username);
+                if (BCrypt.Net.BCrypt.Verify(value.PasswordOld, user.Password) == false)
                 {
                     result.IsSuccess = false;
                     result.Message = "Old password is incorrect";
                     return Ok(result);
                 }
 
-                if(await _repository.ChangePassword(value))
+                if (await _userRepository.ChangePassword(value))
                 {
                     result.IsSuccess = true;
                     result.Message = "Change password is successfully";
@@ -153,7 +124,7 @@ namespace ClothingStore.Controllers
                     result.Message = "Change password is failed";
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 result.InternalError();
             }
@@ -162,16 +133,16 @@ namespace ClothingStore.Controllers
         }
 
         [HttpGet("get-users")]
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUsers()
         {
             var result = new ApiResult();
             try
             {
-                result.Data = await _repository.GetUsers();
+                result.Data = await _userRepository.GetUsers();
                 result.Message = "Get users is successfully";
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 result.InternalError();
             }
@@ -185,10 +156,10 @@ namespace ClothingStore.Controllers
             var result = new ApiResult();
             try
             {
-                result.Data = await _repository.GetRoles();
+                result.Data = await _userRepository.GetRoles();
                 result.Message = "Get roles is successfully";
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 result.InternalError();
             }
@@ -202,7 +173,7 @@ namespace ClothingStore.Controllers
             var result = new ApiResult();
             try
             {
-                if(await _repository.ChangeRole(value))
+                if (await _userRepository.ChangeRole(value))
                 {
                     result.Message = "Get roles is successfully";
                 }

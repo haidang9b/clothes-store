@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ClothingStore.Data.Repositories
 {
-    public class BillRepository: IBillRepository
+    public class BillRepository : IBillRepository
     {
         private readonly ClothingContext _dbContext;
         public BillRepository(ClothingContext dataContext)
@@ -20,53 +20,53 @@ namespace ClothingStore.Data.Repositories
 
         public async Task<bool> ChangeStatus(int id, EStatusBill eStatus)
         {
-            var bill = await _dbContext.bills.Where(b => b.id == id).FirstOrDefaultAsync();
-            bill.status = eStatus;
-            bill.updateDate = DateTimeOffset.Now;
+            var bill = await _dbContext.bills.Where(b => b.Id == id).FirstOrDefaultAsync();
+            bill.Status = eStatus;
+            bill.UpdateDate = DateTimeOffset.Now;
             return await _dbContext.SaveChangesAsync() > 0;
         }
 
         public async Task<TrackingDto> GetBillDetail(int id)
         {
             var trackingDto = new TrackingDto();
-            var bill = await _dbContext.bills.Include(b => b.user).Where(b => b.id == id).FirstOrDefaultAsync();
-            if(bill == null)
+            var bill = await _dbContext.bills.Include(b => b.User).Where(b => b.Id == id).FirstOrDefaultAsync();
+            if (bill == null)
             {
                 return null;
             }
-            trackingDto.user = bill.user.Username;
-            trackingDto.id = bill.id;
-            trackingDto.numberPhone = bill.numberPhone;
-            trackingDto.address = bill.address;
-            trackingDto.status = bill.status;
-            trackingDto.totalPrice = 0;
-            trackingDto.nameReceiver = bill.nameReceiver;
-            trackingDto.updateDate = bill.updateDate;
-            trackingDto.createdDate = bill.createdDate;
-            trackingDto.billDetails = await _dbContext.billDetails.Include(b => b.product).Where(b => b.bill_id == id).ToListAsync();
+            trackingDto.User = bill.User.Username;
+            trackingDto.Id = bill.Id;
+            trackingDto.NumberPhone = bill.NumberPhone;
+            trackingDto.Address = bill.Address;
+            trackingDto.Status = bill.Status;
+            trackingDto.TotalPrice = 0;
+            trackingDto.NameReceiver = bill.NameReceiver;
+            trackingDto.UpdateDate = bill.UpdateDate;
+            trackingDto.CreatedDate = bill.CreatedDate;
+            trackingDto.BillDetails = await _dbContext.billDetails.Include(b => b.Product).Where(b => b.BillId == id).ToListAsync();
             return trackingDto;
         }
 
         public async Task<IEnumerable<Bill>> GetBills()
         {
-            return await _dbContext.bills.Include(b => b.user).OrderByDescending(b => b.id).ToListAsync();
+            return await _dbContext.bills.Include(b => b.User).OrderByDescending(b => b.Id).ToListAsync();
         }
 
         public async Task<int> GetLastBillByUserID(int id)
         {
-            var item = await _dbContext.bills.Where(x => x.user_id == id).OrderByDescending(x => x.id).FirstOrDefaultAsync();
-            return item.id;
+            var item = await _dbContext.bills.Where(x => x.UserId == id).OrderByDescending(x => x.Id).FirstOrDefaultAsync();
+            return item.Id;
         }
 
         public async Task<double> GetTotalPrice(int id)
         {
-            var billDetails = await _dbContext.billDetails.Include(x => x.product).Where(x => x.bill_id ==id).ToListAsync();
+            var billDetails = await _dbContext.billDetails.Include(x => x.Product).Where(x => x.BillId == id).ToListAsync();
             if (billDetails.Count == 0)
                 return 0;
             var totalPrice = 0.0;
-            foreach(var item in billDetails)
+            foreach (var item in billDetails)
             {
-                totalPrice += item.product.price;
+                totalPrice += item.Product.Price;
             }
             return totalPrice;
 
@@ -76,26 +76,26 @@ namespace ClothingStore.Data.Repositories
         {
             var bill = new Bill
             {
-                user_id = user.Id,
-                nameReceiver = cart.nameReceiver,
-                status = Enums.EStatusBill.Confirm,
-                address = cart.address,
-                numberPhone = cart.numberPhone,
-                createdDate = DateTimeOffset.Now,
-                updateDate = DateTimeOffset.Now
+                UserId = user.Id,
+                NameReceiver = cart.NameReceiver,
+                Status = Enums.EStatusBill.Confirm,
+                Address = cart.Address,
+                NumberPhone = cart.NumberPhone,
+                CreatedDate = DateTimeOffset.Now,
+                UpdateDate = DateTimeOffset.Now
             };
             _dbContext.bills.Add(bill);
             await _dbContext.SaveChangesAsync();
-            var lastBill = await _dbContext.bills.Where(b => b.user_id == user.Id).OrderByDescending(b => b.id).FirstOrDefaultAsync();
-            foreach(var item in cart.products)
+            var lastBill = await _dbContext.bills.Where(b => b.UserId == user.Id).OrderByDescending(b => b.Id).FirstOrDefaultAsync();
+            foreach (var item in cart.Products)
             {
-                if (checkValueProduct(item) == false)
+                if (IsValueProduct(item) == false)
                     continue;
                 _dbContext.billDetails.Add(new BillDetail
                 {
-                    bill_id = lastBill.id,
-                    product_id = item,
-                    quantity = 1
+                    BillId = lastBill.Id,
+                    ProductId = item,
+                    Quantity = 1
                 });
                 ReduceProduct(item);
             }
@@ -104,37 +104,37 @@ namespace ClothingStore.Data.Repositories
 
 
 
-        private bool checkValueProduct(int id)
+        private bool IsValueProduct(int id)
         {
-            var product = _dbContext.products.FirstOrDefault(p => p.id == id);
-            return product.quantity > 0;
+            var product = _dbContext.products.FirstOrDefault(p => p.Id == id);
+            return product.Quantity > 0;
         }
         private void ReduceProduct(int id)
         {
-            var product = _dbContext.products.FirstOrDefault(p => p.id == id);
-            product.quantity -= 1;
+            var product = _dbContext.products.FirstOrDefault(p => p.Id == id);
+            product.Quantity -= 1;
             _dbContext.SaveChanges();
         }
 
         public async Task<IEnumerable<OrderExport>> GetBillDetailByTime(ExportDataDto data)
         {
-            var start = new DateTimeOffset(DateTimeOffset.Parse(data.start).DateTime, TimeSpan.Zero);
-            var end = new DateTimeOffset(DateTimeOffset.Parse(data.end).AddDays(1).DateTime, TimeSpan.Zero);
-            var orders = _dbContext.bills.Include(x => x.billDetails).Include(x => x.user).Where(x => x.createdDate <= end && x.createdDate >= start).ToList();
+            var start = new DateTimeOffset(DateTimeOffset.Parse(data.Start).DateTime, TimeSpan.Zero);
+            var end = new DateTimeOffset(DateTimeOffset.Parse(data.End).AddDays(1).DateTime, TimeSpan.Zero);
+            var orders = _dbContext.bills.Include(x => x.BillDetails).Include(x => x.User).Where(x => x.CreatedDate <= end && x.CreatedDate >= start).ToList();
             var result = new List<OrderExport>();
-            foreach(var item in orders)
+            foreach (var item in orders)
             {
                 result.Add(new OrderExport
                 {
-                    id = item.id,
-                    username = item.user.Username,
-                    createdDate = item.createdDate,
-                    updateDate = item.updateDate,
-                    nameReceiver = item.nameReceiver,
-                    numberPhone = item.numberPhone,
-                    address = item.address,
-                    status = item.status,
-                    totalCost = await GetTotalCostBill(item.id)
+                    Id = item.Id,
+                    Username = item.User.Username,
+                    CreatedDate = item.CreatedDate,
+                    UpdateDate = item.UpdateDate,
+                    NameReceiver = item.NameReceiver,
+                    NumberPhone = item.NumberPhone,
+                    Address = item.Address,
+                    Status = item.Status,
+                    TotalCost = await GetTotalCostBill(item.Id)
                 });
             }
             return result;
@@ -142,11 +142,11 @@ namespace ClothingStore.Data.Repositories
 
         private async Task<double> GetTotalCostBill(int idBill)
         {
-            var data = await _dbContext.billDetails.Include(x => x.product).Where(x => x.bill_id == idBill).ToListAsync();
+            var data = await _dbContext.billDetails.Include(x => x.Product).Where(x => x.BillId == idBill).ToListAsync();
             var result = 0.0;
-            foreach(var item in data)
+            foreach (var item in data)
             {
-                result += item.product.price;
+                result += item.Product.Price;
             }
             return result;
         }

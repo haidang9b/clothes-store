@@ -3,8 +3,6 @@ using ClothingStore.Entities;
 using ClothingStore.Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -15,10 +13,10 @@ namespace ClothingStore.Controllers
     [ApiController]
     public class StoresController : ControllerBase
     {
-        private readonly IStoreRepository _repository;
-        public StoresController(IStoreRepository repository)
+        private readonly IStoreRepository _storeRepository;
+        public StoresController(IStoreRepository storeRepository)
         {
-            _repository = repository;
+            _storeRepository = storeRepository;
         }
         // GET: api/<StoresController>
         [HttpGet]
@@ -27,10 +25,10 @@ namespace ClothingStore.Controllers
             var result = new ApiResult();
             try
             {
-                result.Data = await _repository.GetStores();
+                result.Data = await _storeRepository.GetStores();
                 result.Message = "Get stores is successfully";
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 result.InternalError();
             }
@@ -44,7 +42,7 @@ namespace ClothingStore.Controllers
             var result = new ApiResult();
             try
             {
-                result.Data = await _repository.GetStoreByID(id);
+                result.Data = await _storeRepository.GetStoreByID(id);
                 result.Message = "Get a store is successfully";
             }
             catch
@@ -61,7 +59,7 @@ namespace ClothingStore.Controllers
             var result = new ApiResult();
             try
             {
-                if (await _repository.InsertStore(value))
+                if (await _storeRepository.InsertStore(value))
                 {
                     result.IsSuccess = true;
                     result.Message = "Insert a store is successfully";
@@ -86,10 +84,10 @@ namespace ClothingStore.Controllers
             var result = new ApiResult();
             try
             {
-                value.id = id;
-                if(await _repository.EditStore(value))
+                value.Id = id;
+                if (await _storeRepository.EditStore(value))
                 {
-                    result.IsSuccess = true ;
+                    result.IsSuccess = true;
                     result.Message = "Update a store is successfully";
                 }
                 else
@@ -112,8 +110,8 @@ namespace ClothingStore.Controllers
             var result = new ApiResult();
             try
             {
-                var store = new Store { id = id };
-                if(await _repository.DeleteStore(store))
+                var store = new Store { Id = id };
+                if (await _storeRepository.DeleteStore(store))
                 {
                     result.Message = "Delete a store is successfully";
                     result.IsSuccess = true;

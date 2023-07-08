@@ -3,8 +3,6 @@ using ClothingStore.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -15,10 +13,10 @@ namespace ClothingStore.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly IProductRepository _repository;
-        public ProductsController(IProductRepository repository)
+        private readonly IProductRepository _productRepository;
+        public ProductsController(IProductRepository productRepository)
         {
-            _repository = repository;
+            _productRepository = productRepository;
         }
         // GET: api/<ProductsController>
         [HttpGet]
@@ -28,9 +26,9 @@ namespace ClothingStore.Controllers
             try
             {
                 result.Message = "Get Products is successfully";
-                result.Data = await _repository.GetProducts();
+                result.Data = await _productRepository.GetProducts();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 result.InternalError();
             }
@@ -44,7 +42,7 @@ namespace ClothingStore.Controllers
             var result = new ApiResult();
             try
             {
-                result.Data = await _repository.GetProductByID(id);
+                result.Data = await _productRepository.GetProductByID(id);
                 if (result.Data == null)
                 {
                     result.Message = "Not exist product with this id";
@@ -71,7 +69,7 @@ namespace ClothingStore.Controllers
             var result = new ApiResult();
             try
             {
-                if (await _repository.InsertProduct(value))
+                if (await _productRepository.InsertProduct(value))
                 {
                     result.Message = "Add a product is successfully";
                     result.IsSuccess = true;
@@ -82,7 +80,7 @@ namespace ClothingStore.Controllers
                     result.IsSuccess = false;
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 result.InternalError();
             }
@@ -95,11 +93,11 @@ namespace ClothingStore.Controllers
         public async Task<IActionResult> Put(int id, [FromForm] Product product)
         {
             var result = new ApiResult();
-            
+
             try
             {
-                product.id = id;
-                if (await _repository.EditProduct(product))
+                product.Id = id;
+                if (await _productRepository.EditProduct(product))
                 {
                     result.Message = "Update a product is successfully";
                     result.IsSuccess = true;
@@ -125,8 +123,8 @@ namespace ClothingStore.Controllers
             var result = new ApiResult();
             try
             {
-                var product = new Product { id = id };
-                if (await _repository.DeleteProduct(product))
+                var product = new Product { Id = id };
+                if (await _productRepository.DeleteProduct(product))
                 {
                     result.Message = "Delete a product is successfully";
                     result.IsSuccess = true;
@@ -150,10 +148,10 @@ namespace ClothingStore.Controllers
             var result = new ApiResult();
             try
             {
-                result.Data = await _repository.GetNewArrivals(page);
+                result.Data = await _productRepository.GetNewArrivals(page);
                 result.Message = "GetNewArrivals is Successfully ";
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 result.InternalError();
             }
@@ -166,7 +164,7 @@ namespace ClothingStore.Controllers
             var result = new ApiResult();
             try
             {
-                result.Data = await _repository.GetProductsByCategoryID(id);
+                result.Data = await _productRepository.GetProductsByCategoryID(id);
                 if (result.Data == null)
                 {
                     result.Message = "Not exist products with this id";

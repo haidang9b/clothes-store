@@ -1,6 +1,5 @@
 ﻿using ClothingStore.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +15,7 @@ namespace ClothingStore.Data.Repositories
         }
         public async Task<bool> DeleteProduct(Product product)
         {
-            var old = await _dbContext.products.Include(p => p.Category).FirstOrDefaultAsync(p => p.id == product.id);
+            var old = await _dbContext.products.Include(p => p.Category).FirstOrDefaultAsync(p => p.Id == product.Id);
             if (old == null)
             {
                 return false;
@@ -28,29 +27,29 @@ namespace ClothingStore.Data.Repositories
 
         public async Task<bool> EditProduct(Product product)
         {
-            var old = await _dbContext.products.Where(p => p.id == product.id).FirstOrDefaultAsync();
+            var old = await _dbContext.products.Where(p => p.Id == product.Id).FirstOrDefaultAsync();
             if (old == null)
             {
                 return false;
             }
-            old.quantity = product.quantity;
-            old.image = product.image;
-            old.price = product.price;
-            old.title = product.title;
-            old.category_id = product.category_id;
-            old.description = product.description;
+            old.Quantity = product.Quantity;
+            old.Image = product.Image;
+            old.Price = product.Price;
+            old.Title = product.Title;
+            old.CategoryId = product.CategoryId;
+            old.Description = product.Description;
             var rows = await _dbContext.SaveChangesAsync();
             return rows > 0;
         }
 
         public async Task<IEnumerable<Product>> GetNewArrivals(int pageSize)
         {
-            return await _dbContext.products.OrderByDescending(p => p.id).Take(pageSize).ToListAsync();
+            return await _dbContext.products.OrderByDescending(p => p.Id).Take(pageSize).ToListAsync();
         }
 
         public async Task<Product> GetProductByID(int id)
         {
-            return await _dbContext.products.Include(p => p.Category).Where(p => p.id == id).FirstOrDefaultAsync();
+            return await _dbContext.products.Include(p => p.Category).Where(p => p.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Product>> GetProducts()
@@ -60,7 +59,7 @@ namespace ClothingStore.Data.Repositories
 
         public async Task<IEnumerable<Product>> GetProductsByCategoryID(int id)
         {
-            return await _dbContext.products.Include(p => p.Category).Where(p => p.category_id == id).ToListAsync();
+            return await _dbContext.products.Include(p => p.Category).Where(p => p.CategoryId == id).ToListAsync();
         }
 
         public async Task<bool> InsertProduct(Product product)

@@ -4,10 +4,8 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ClothingStore.Data.Repositories
 {
@@ -24,7 +22,7 @@ namespace ClothingStore.Data.Repositories
             {
                 new Claim(JwtRegisteredClaimNames.NameId, user.Username),
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, user.role.name),
+                new Claim(ClaimTypes.Role, user.Role.Name),
                 new Claim(ClaimTypes.GivenName, user.FullName)
             };
 

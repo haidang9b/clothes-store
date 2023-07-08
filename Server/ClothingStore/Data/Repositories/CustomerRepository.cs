@@ -1,9 +1,7 @@
 ﻿using ClothingStore.Entities;
 using ClothingStore.Entities.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ClothingStore.Data.Repositories
@@ -17,7 +15,7 @@ namespace ClothingStore.Data.Repositories
         }
         public async Task<bool> DeleteCustomer(Customer customer)
         {
-            var old = await _dbContext.customers.FirstOrDefaultAsync(c => c.id == customer.id);
+            var old = await _dbContext.customers.FirstOrDefaultAsync(c => c.Id == customer.Id);
             if (old == null)
             {
                 return false;
@@ -29,26 +27,26 @@ namespace ClothingStore.Data.Repositories
 
         public async Task<bool> EditCustomer(Customer customer)
         {
-            var old = await _dbContext.customers.FirstOrDefaultAsync(c => c.id == customer.id);
+            var old = await _dbContext.customers.FirstOrDefaultAsync(c => c.Id == customer.Id);
             if (old == null)
             {
                 return false;
             }
-            old.phoneNumber = customer.phoneNumber;
-            old.name = customer.name;
-            old.address = customer.address;
+            old.PhoneNumber = customer.PhoneNumber;
+            old.Name = customer.Name;
+            old.Address = customer.Address;
             var rows = await _dbContext.SaveChangesAsync();
             return rows > 0;
         }
 
         public async Task<Customer> GetCustomerByID(int id)
         {
-            return await _dbContext.customers.FirstOrDefaultAsync(c => c.id == id);
+            return await _dbContext.customers.FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<Customer> GetCustomerByNumberPhone(string numberPhone)
         {
-            return await _dbContext.customers.FirstOrDefaultAsync(c => c.phoneNumber == numberPhone);
+            return await _dbContext.customers.FirstOrDefaultAsync(c => c.PhoneNumber == numberPhone);
         }
 
         public async Task<IEnumerable<Customer>> GetCustomers()

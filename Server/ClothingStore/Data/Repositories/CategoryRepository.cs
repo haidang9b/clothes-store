@@ -1,9 +1,7 @@
 ﻿using ClothingStore.Entities;
 using ClothingStore.Entities.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ClothingStore.Data.Repositories
@@ -17,7 +15,7 @@ namespace ClothingStore.Data.Repositories
         }
         public async Task<bool> DeleteCategory(Category category)
         {
-            var old = await _dbContext.categories.FirstOrDefaultAsync(c => c.id == category.id);
+            var old = await _dbContext.categories.FirstOrDefaultAsync(c => c.Id == category.Id);
             if (old == null)
             {
                 return false;
@@ -29,12 +27,12 @@ namespace ClothingStore.Data.Repositories
 
         public async Task<bool> EditCategory(Category category)
         {
-            var old = await _dbContext.categories.FirstOrDefaultAsync(c => c.id == category.id);
-            if(old == null)
+            var old = await _dbContext.categories.FirstOrDefaultAsync(c => c.Id == category.Id);
+            if (old == null)
             {
                 return false;
             }
-            old.name = category.name;
+            old.Name = category.Name;
             var rows = await _dbContext.SaveChangesAsync();
             return rows > 0;
         }
@@ -46,7 +44,7 @@ namespace ClothingStore.Data.Repositories
 
         public async Task<Category> GetCategoryByID(int id)
         {
-            return await _dbContext.categories.FirstOrDefaultAsync(c => c.id == id);
+            return await _dbContext.categories.FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<bool> InsertCategory(Category category)

@@ -1,14 +1,12 @@
 ﻿using ClothingStore.Entities;
 using ClothingStore.Entities.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ClothingStore.Data.Repositories
 {
-    public class StoreRepository: IStoreRepository
+    public class StoreRepository : IStoreRepository
     {
         private readonly ClothingContext _dbContext;
         public StoreRepository(ClothingContext dbContext)
@@ -17,12 +15,12 @@ namespace ClothingStore.Data.Repositories
         }
         public async Task<IEnumerable<Store>> GetStores()
         {
-            return await _dbContext.stores.ToListAsync() ;
+            return await _dbContext.stores.ToListAsync();
         }
 
         public async Task<Store> GetStoreByID(int id)
         {
-            return await _dbContext.stores.FirstOrDefaultAsync(s => s.id == id);
+            return await _dbContext.stores.FirstOrDefaultAsync(s => s.Id == id);
         }
 
         public async Task<bool> InsertStore(Store store)
@@ -34,21 +32,21 @@ namespace ClothingStore.Data.Repositories
 
         public async Task<bool> EditStore(Store store)
         {
-            var old = await _dbContext.stores.FirstOrDefaultAsync(s => s.id == store.id);
+            var old = await _dbContext.stores.FirstOrDefaultAsync(s => s.Id == store.Id);
             if (old == null)
             {
                 return false;
             }
-            old.name = store.name;
-            old.phoneNumber = store.phoneNumber;
-            old.address = store.address;
+            old.Name = store.Name;
+            old.PhoneNumber = store.PhoneNumber;
+            old.Address = store.Address;
             var row = await _dbContext.SaveChangesAsync();
-            return row >0;
+            return row > 0;
         }
 
         public async Task<bool> DeleteStore(Store store)
         {
-            var old = await _dbContext.stores.FirstOrDefaultAsync(s => s.id == store.id);
+            var old = await _dbContext.stores.FirstOrDefaultAsync(s => s.Id == store.Id);
             if (old == null)
             {
                 return false;

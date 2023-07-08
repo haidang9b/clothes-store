@@ -1,14 +1,9 @@
 ﻿using ClothingStore.Entities.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ClothingStore.Entities
 {
-    public class ClothingContext: DbContext
+    public class ClothingContext : DbContext
     {
         public ClothingContext(DbContextOptions options) : base(options)
         {

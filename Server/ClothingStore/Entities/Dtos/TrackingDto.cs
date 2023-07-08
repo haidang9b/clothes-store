@@ -2,23 +2,21 @@
 using ClothingStore.Enums;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ClothingStore.Entities.Dtos
 {
     public class TrackingDto
     {
-        public int id { get; set; }
-        public string user { get; set; }
-        public double totalPrice { get; set; }
-        public DateTimeOffset createdDate { get; set; }
-        public DateTimeOffset updateDate { get; set; }
-        public string nameReceiver { get; set; }
-        public string numberPhone { get; set; }
-        public string address { get; set; }
-        public EStatusBill status { get; set; }
-        public List<BillDetail> billDetails { get; set; }
+        public int Id { get; set; }
+        public string User { get; set; }
+        public double TotalPrice { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
+        public DateTimeOffset UpdateDate { get; set; }
+        public string NameReceiver { get; set; }
+        public string NumberPhone { get; set; }
+        public string Address { get; set; }
+        public EStatusBill Status { get; set; }
+        public List<BillDetail> BillDetails { get; set; }
 
     }
 }

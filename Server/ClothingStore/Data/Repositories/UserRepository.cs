@@ -19,15 +19,15 @@ namespace ClothingStore.Data.Repositories
 
         public async Task<bool> ChangePassword(ChangePasswordDto value)
         {
-            var old = await _dbContext.users.FirstOrDefaultAsync(x => x.Username == value.username);
+            var old = await _dbContext.users.FirstOrDefaultAsync(x => x.Username == value.Username);
 
-            old.Password = BCrypt.Net.BCrypt.HashPassword(value.passwordNew, BCrypt.Net.SaltRevision.Revision2Y);
+            old.Password = BCrypt.Net.BCrypt.HashPassword(value.PasswordNew, BCrypt.Net.SaltRevision.Revision2Y);
             return await _dbContext.SaveChangesAsync() > 0;
         }
 
         public async Task<User> GetUserByUsername(string username)
         {
-            var user = await _dbContext.users.Include(u => u.role).Where(u => u.Username == username).FirstOrDefaultAsync();
+            var user = await _dbContext.users.Include(u => u.Role).Where(u => u.Username == username).FirstOrDefaultAsync();
             if (user is null) return null;
             return user;
         }
@@ -39,7 +39,7 @@ namespace ClothingStore.Data.Repositories
             {
                 Id = x.Id,
                 FullName = x.FullName,
-                role_id = x.role_id,
+                RoleId = x.RoleId,
                 Username = x.Username
             }).ToListAsync();
             return result;
@@ -58,7 +58,7 @@ namespace ClothingStore.Data.Repositories
 
         public async Task<bool> register(RegisterDto user)
         {
-            var newUser = new User { Username = user.Username.ToLower(), FullName = user.FullName, role_id = 3 };
+            var newUser = new User { Username = user.Username.ToLower(), FullName = user.FullName, RoleId = 3 };
             newUser.Password = BCrypt.Net.BCrypt.HashPassword(user.Password, BCrypt.Net.SaltRevision.Revision2Y);
             _dbContext.users.Add(newUser);
             var rs = await _dbContext.SaveChangesAsync();
@@ -66,8 +66,8 @@ namespace ClothingStore.Data.Repositories
         }
         public async Task<Role> UserHasRole(string username)
         {
-            var user = await _dbContext.users.Include(p => p.role).FirstOrDefaultAsync(u => u.Username == username);
-            return user.role;
+            var user = await _dbContext.users.Include(p => p.Role).FirstOrDefaultAsync(u => u.Username == username);
+            return user.Role;
         }
 
         public async Task<IEnumerable<Role>> GetRoles()
@@ -77,9 +77,9 @@ namespace ClothingStore.Data.Repositories
 
         public async Task<bool> ChangeRole(ChangeRoleDto value)
         {
-            var old = await _dbContext.users.FirstOrDefaultAsync(x => x.Id == value.user_id);
+            var old = await _dbContext.users.FirstOrDefaultAsync(x => x.Id == value.UserId);
             if (old is null) return false;
-            old.role_id = value.role_id;
+            old.RoleId = value.RoleId;
             return await _dbContext.SaveChangesAsync() > 0;
         }
     }

@@ -1,11 +1,9 @@
 ﻿using ClothingStore.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,11 +26,11 @@ namespace ClothingStore.Controllers
         }
 
         [HttpPost("upload")]
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Upload(IFormFile file)
         {
             var result = new ApiResult();
-            if(file.Length == 0)
+            if (file.Length == 0)
             {
                 result.IsSuccess = false;
                 result.Message = "Not exist file";
@@ -41,7 +39,7 @@ namespace ClothingStore.Controllers
             }
 
             var response = await WriteFile(file);
-            var fileTypesAccept = new string[]{ ".jpg", ".png", ".svg", ".jpeg", ".webp" };
+            var fileTypesAccept = new string[] { ".jpg", ".png", ".svg", ".jpeg", ".webp" };
             if (!fileTypesAccept.Contains(Path.GetExtension(file.FileName).ToLower()))
             {
                 result.IsSuccess = false;
@@ -63,7 +61,7 @@ namespace ClothingStore.Controllers
             return Ok(result);
         }
         #region Privates
-        [NonAction] 
+        [NonAction]
         private async Task<ResponseWriteFile> WriteFile(IFormFile file)
         {
             var result = new ResponseWriteFile();
@@ -78,7 +76,7 @@ namespace ClothingStore.Controllers
                     Directory.CreateDirectory(pathBuilt);
                 }
                 var url = Path.Combine(_configuration.GetSection("Backend:Url").Value, "Uploads", "Images", fileName);
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads","Images", fileName);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads", "Images", fileName);
                 using (var stream = new FileStream(path, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);
@@ -86,7 +84,7 @@ namespace ClothingStore.Controllers
                 result.isSuccess = true;
                 result.pathFile = url;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 result.isSuccess = false;
             }
